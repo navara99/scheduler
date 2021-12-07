@@ -6,7 +6,7 @@ export default function DayList({ days, day, setDay }) {
   const dayListItems = days.map((days) => {
     const { id, name, spots } = days;
 
-    return <DayListItem key={id} selected={name === day} setDay={setDay} spots={spots} />
+    return <DayListItem key={id} selected={name === day} setDay={setDay} spots={spots} name={name} />
   })
 
 
