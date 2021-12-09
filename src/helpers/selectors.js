@@ -12,6 +12,20 @@ const getAppointmentsForDay = ({ days, appointments }, selectedName) => {
   return selectedAppointmentArr;
 };
 
+const getInterviewersForDay = ({ days, interviewers }, selectedName) => {
+  const selectedAppointmentArr = [];
+
+  days.forEach((day) => {
+    const { name, appointments: appointsmentsArr } = day;
+    if (name !== selectedName) return;
+    appointsmentsArr.forEach((appointmentId) => {
+      selectedAppointmentArr.push(interviewers[appointmentId])
+    });
+  });
+
+  return selectedAppointmentArr;
+};
+
 const getInterview = (state, interview) => {
   if (!interview) return null;
   const { interviewer } = interview
@@ -19,5 +33,5 @@ const getInterview = (state, interview) => {
   return { ...interview, interviewer: interviewers[interviewer] }
 }
 
-export { getAppointmentsForDay, getInterview };
+export { getAppointmentsForDay, getInterview, getInterviewersForDay };
 
