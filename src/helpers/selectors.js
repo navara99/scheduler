@@ -10,7 +10,14 @@ const getAppointmentsForDay = ({ days, appointments }, selectedName) => {
   });
 
   return selectedAppointmentArr;
+};
+
+const getInterview = (state, interview) => {
+  if (!interview) return null;
+  const { interviewer } = interview
+  const { interviewers } = state;
+  return { ...interview, interviewer: interviewers[interviewer] }
 }
 
-export default getAppointmentsForDay;
+export { getAppointmentsForDay, getInterview };
 
