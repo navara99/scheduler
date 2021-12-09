@@ -6,7 +6,7 @@ import { getAppointmentsForDay, getInterview } from "helpers/selectors";
 import "components/Application.scss";
 
 export default function Application(props) {
-  const [state, setState] = useState({ days: [], appointments: {} })
+  const [state, setState] = useState({ days: [], appointments: {}, interviewers: {} })
   const [day, setDay] = useState("Monday");
 
   useEffect(() => {
@@ -19,9 +19,11 @@ export default function Application(props) {
         axios.get(appointmentsEndpoint),
         axios.get(interviewersEndpoint)
       ]
-    ).then(([{ data: days }, { data: appointments }, { data: interviewers }]) => {
-      setState((prev) => ({ ...prev, days, appointments, interviewers }));
+    )
+    .then(([{ data: days }, { data: appointments }, { data: interviewers }]) => {
+      setState(({ days, appointments, interviewers }));
     })
+    .catch((err) => console.error(err.message));
   }, []);
 
   const appointmentList = getAppointmentsForDay(state, day).map((appointment) => {
