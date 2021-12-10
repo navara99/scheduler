@@ -13,17 +13,17 @@ const getAppointmentsForDay = ({ days, appointments }, selectedName) => {
 };
 
 const getInterviewersForDay = ({ days, interviewers }, selectedName) => {
-  const selectedAppointmentArr = [];
+  const selectedInterviewersArr = [];
 
   days.forEach((day) => {
-    const { name, appointments: appointsmentsArr } = day;
+    const { name, interviewers: interviewersArr } = day;
     if (name !== selectedName) return;
-    appointsmentsArr.forEach((appointmentId) => {
-      selectedAppointmentArr.push(interviewers[appointmentId])
+    interviewersArr.forEach((interviewerId) => {
+      selectedInterviewersArr.push(interviewers[interviewerId])
     });
   });
 
-  return selectedAppointmentArr;
+  return selectedInterviewersArr;
 };
 
 const getInterview = (state, interview) => {
