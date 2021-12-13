@@ -3,6 +3,13 @@ import { useState, useEffect } from "react";
 
 const useApplicationData = () => {
   const [state, setState] = useState({ day: "Monday", days: [], appointments: {}, interviewers: {} });
+  const dateIdMap = {
+    "Monday": 0,
+    "Tuesday": 1,
+    "Wednesday": 2,
+    "Thursday": 3,
+    "Friday": 4
+  };
 
   useEffect(() => {
     const daysEndpoint = "/api/days";
@@ -23,6 +30,15 @@ const useApplicationData = () => {
 
   const setDay = (day) => setState((prev) => ({ ...prev, day }));
 
+  const updateSpots = (addSpot = true) => {
+    setState((prev) => {
+      const stateCopy = { ...prev };
+      const dayId = dateIdMap[stateCopy.day];
+      state.days[dayId].spots = addSpot ? state.days[dayId].spots + 1 : state.days[dayId].spots - 1;
+      return stateCopy
+    });
+  }
+
   const bookInterview = async (id, interview) => {
     const appointment = {
       ...state.appointments[id],
@@ -40,7 +56,9 @@ const useApplicationData = () => {
       throw new Error(e)
     }
 
+    updateSpots(false);
     setState((prev) => ({ ...prev, appointments: { ...appointments } }));
+
   }
 
   const cancelInterview = async (id) => {
@@ -51,9 +69,14 @@ const useApplicationData = () => {
       throw new Error(e)
     }
 
-    const stateCopy = { ...state };
-    stateCopy.appointments[id].interview = null;
-    setState(stateCopy);
+    updateSpots();
+    setState((prev) => {
+      const stateCopy = { ...prev };
+      stateCopy.appointments[id].interview = null;
+      return stateCopy;
+    }
+    );
+
   }
 
   return { state, setDay, bookInterview, cancelInterview }
