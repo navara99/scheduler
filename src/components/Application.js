@@ -26,18 +26,37 @@ export default function Application(props) {
       .catch((err) => console.error(err.message));
   }, []);
 
+  const bookInterview = (id, interview) => {
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    setState((prev) => ({ ...prev, appointments: { ...appointments } }))
+    console.log(appointment);
+    console.log(id, interview);
+  }
+
   const interviewersForDay = getInterviewersForDay(state, day);
-  
+
   const appointmentList = getAppointmentsForDay(state, day).map((appointment) => {
     const transformedInterview = getInterview(state, appointment.interview);
 
     return <Appointment
       key={appointment.id}
       time={appointment.time}
+      id={appointment.id}
       interviewers={interviewersForDay}
-      interview={transformedInterview} />
+      interview={transformedInterview}
+      bookInterview={bookInterview}
+    />
   }).concat(<Appointment key="last" time="5pm" />);
-
+  console.log(state);
   return (
     <main className="layout">
       <section className="sidebar">
