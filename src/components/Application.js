@@ -38,25 +38,25 @@ export default function Application(props) {
     };
 
     try {
-      setState((prev) => ({ ...prev, appointments: { ...appointments } }));
       await axios.put(`/api/appointments/${id}`, appointment);
     } catch (e) {
-      console.error(e);
+      throw new Error(e)
     }
 
-    console.log(appointment);
-    console.log(id, interview);
+    setState((prev) => ({ ...prev, appointments: { ...appointments } }));
   }
 
   const cancelInterview = async (id) => {
+
     try {
       await axios.delete(`/api/appointments/${id}`);
-      const stateCopy = { ...state };
-      stateCopy.appointments[id].interview = null;
-      setState(stateCopy);
     } catch (e) {
-      console.log(e);
+      throw new Error(e)
     }
+
+    const stateCopy = { ...state };
+    stateCopy.appointments[id].interview = null;
+    setState(stateCopy);
   }
 
   const interviewersForDay = getInterviewersForDay(state, day);
