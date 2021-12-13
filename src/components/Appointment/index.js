@@ -5,6 +5,7 @@ import Show from "./Show";
 import Empty from "./Empty";
 import Form from "./Form";
 import Status from "./Status";
+import Confirm from "./Confirm";
 import useVisualMode from "hooks/useVisualMode";
 
 export default function Appointment({ time, interview, interviewers, bookInterview, id, cancelInterview }) {
@@ -13,6 +14,8 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
   const CREATE = "CREATE";
   const SAVING = "SAVING";
   const DELETING = "DELETING";
+  const CONFIRM = "CONFIRM";
+  const EDIT = "EDIT";
   const { transition, back, mode } = useVisualMode(interview ? SHOW : EMPTY);
 
   const save = async (name, interviewer) => {
@@ -31,9 +34,9 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
   };
 
   const deleteInterview = async () => {
-    transition("DELETING");
 
     try {
+      transition("DELETING");
       await cancelInterview();
       transition("EMPTY");
     } catch (e) {
@@ -49,12 +52,25 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
         student={interview.student}
         interviewer={interview.interviewer.name}
         time={time}
-        onDelete={deleteInterview}
+        onDelete={() => transition("CONFIRM")}
+        onEdit={() => transition("EDIT")}
       />}
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === CREATE && <Form onSave={save} interviewers={interviewers} onCancel={() => back()} />}
+      {mode === EDIT && <Form
+        onSave={save}
+        onCancel={() => back()}
+        interviewers={interviewers}
+        interviewer={interview.interviewer}
+        student={interview.student}
+      />}
       {mode === SAVING && <Status message="Saving" />}
       {mode === DELETING && <Status message="Deleting" />}
+      {mode === CONFIRM && <Confirm
+        message="Are you sure you would like to delete?"
+        onConfirm={deleteInterview}
+        onCancel={() => back()}
+      />}
     </article>
   )
 
