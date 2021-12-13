@@ -7,11 +7,12 @@ import Form from "./Form";
 import Status from "./Status";
 import useVisualMode from "hooks/useVisualMode";
 
-export default function Appointment({ time, interview, interviewers, bookInterview, id }) {
+export default function Appointment({ time, interview, interviewers, bookInterview, id, cancelInterview }) {
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
   const SAVING = "SAVING";
+  const DELETING = "DELETING";
   const { transition, back, mode } = useVisualMode(interview ? SHOW : EMPTY);
 
   const save = async (name, interviewer) => {
@@ -29,13 +30,31 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
 
   };
 
+  const deleteInterview = async () => {
+    transition("DELETING");
+
+    try {
+      await cancelInterview();
+      transition("EMPTY");
+    } catch (e) {
+      console.error(e);
+    }
+
+  }
+
   return (
     <article className="appointment">
       <Header time={time} />
-      {mode === SHOW && < Show student={interview.student} interviewer={interview.interviewer.name} time={time} />}
+      {mode === SHOW && < Show
+        student={interview.student}
+        interviewer={interview.interviewer.name}
+        time={time}
+        onDelete={deleteInterview}
+      />}
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === CREATE && <Form onSave={save} interviewers={interviewers} onCancel={() => back()} />}
-      {mode === SAVING && <Status />}
+      {mode === SAVING && <Status message="Saving" />}
+      {mode === DELETING && <Status message="Deleting" />}
     </article>
   )
 

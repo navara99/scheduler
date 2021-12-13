@@ -48,6 +48,17 @@ export default function Application(props) {
     console.log(id, interview);
   }
 
+  const cancelInterview = async (id) => {
+    try {
+      await axios.delete(`/api/appointments/${id}`);
+      const stateCopy = { ...state };
+      stateCopy.appointments[id].interview = null;
+      setState(stateCopy);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   const interviewersForDay = getInterviewersForDay(state, day);
 
   const appointmentList = getAppointmentsForDay(state, day).map((appointment) => {
@@ -57,6 +68,7 @@ export default function Application(props) {
       key={appointment.id}
       time={appointment.time}
       id={appointment.id}
+      cancelInterview={() => cancelInterview(appointment.id)}
       interviewers={interviewersForDay}
       interview={transformedInterview}
       bookInterview={bookInterview}
