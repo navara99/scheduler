@@ -6,6 +6,7 @@ import Empty from "./Empty";
 import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
+import Error from "./Error";
 import useVisualMode from "hooks/useVisualMode";
 
 export default function Appointment({ time, interview, interviewers, bookInterview, id, cancelInterview }) {
@@ -16,6 +17,9 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
   const DELETING = "DELETING";
   const CONFIRM = "CONFIRM";
   const EDIT = "EDIT";
+  const ERROR_SAVE = "ERROR_SAVE";
+  const ERROR_DELETE = "ERROR_DELETE";
+
   const { transition, back, mode } = useVisualMode(interview ? SHOW : EMPTY);
 
   const save = async (name, interviewer) => {
@@ -23,12 +27,13 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
       student: name,
       interviewer
     }
-    transition("SAVING");
+
     try {
+      transition(SAVING);
       await bookInterview(id, interview);
-      transition("SHOW");
+      transition(SHOW);
     } catch (e) {
-      console.log(e.message);
+      transition(ERROR_SAVE);
     }
 
   };
@@ -36,11 +41,11 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
   const deleteInterview = async () => {
 
     try {
-      transition("DELETING");
+      transition(DELETING);
       await cancelInterview();
-      transition("EMPTY");
+      transition(EMPTY);
     } catch (e) {
-      console.error(e);
+      transition(ERROR_DELETE);
     }
 
   }
@@ -52,8 +57,8 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
         student={interview.student}
         interviewer={interview.interviewer.name}
         time={time}
-        onDelete={() => transition("CONFIRM")}
-        onEdit={() => transition("EDIT")}
+        onDelete={() => transition(CONFIRM)}
+        onEdit={() => transition(EDIT)}
       />}
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === CREATE && <Form onSave={save} interviewers={interviewers} onCancel={() => back()} />}
@@ -71,6 +76,8 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
         onConfirm={deleteInterview}
         onCancel={() => back()}
       />}
+      {mode === ERROR_SAVE && <Error message="Could not save appointment." onClose={() => back()} />}
+      {mode === ERROR_DELETE && <Error message="Could not cancel appointment." onClose={() => back()} />}
     </article>
   )
 
