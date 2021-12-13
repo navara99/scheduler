@@ -26,7 +26,7 @@ export default function Application(props) {
       .catch((err) => console.error(err.message));
   }, []);
 
-  const bookInterview = (id, interview) => {
+  const bookInterview = async (id, interview) => {
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -37,7 +37,13 @@ export default function Application(props) {
       [id]: appointment
     };
 
-    setState((prev) => ({ ...prev, appointments: { ...appointments } }))
+    try {
+      setState((prev) => ({ ...prev, appointments: { ...appointments } }));
+      await axios.put(`/api/appointments/${id}`, appointment);
+    } catch (e) {
+      console.error(e);
+    }
+
     console.log(appointment);
     console.log(id, interview);
   }
