@@ -33,7 +33,7 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
       await bookInterview(id, interview);
       transition(SHOW);
     } catch (e) {
-      transition(ERROR_SAVE);
+      transition(ERROR_SAVE, true);
     }
 
   };
@@ -41,11 +41,11 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
   const deleteInterview = async () => {
 
     try {
-      transition(DELETING);
+      transition(DELETING, true);
       await cancelInterview();
       transition(EMPTY);
     } catch (e) {
-      transition(ERROR_DELETE);
+      transition(ERROR_DELETE, true);
     }
 
   }
