@@ -51,6 +51,12 @@ const useApplicationData = () => {
   const [state, dispatch] = useReducer(reducer, { day: "Monday", days: [], appointments: {}, interviewers: {} })
 
   useEffect(() => {
+    const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+    ws.onopen = () => ws.send("ping");
+
+  }, []);
+
+  useEffect(() => {
     const daysEndpoint = "/api/days";
     const appointmentsEndpoint = "/api/appointments";
     const interviewersEndpoint = "/api/interviewers";
