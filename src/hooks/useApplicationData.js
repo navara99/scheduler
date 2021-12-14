@@ -30,13 +30,13 @@ function reducer(state, action) {
     case ADD_SPOT: {
       const stateCopy = { ...state };
       const id = dateIdMap[stateCopy.day];
-      stateCopy.days[id].spots -= 1;
+      stateCopy.days[id].spots += 1;
       return { ...stateCopy };
     }
     case SUB_SPOT: {
       const stateCopy = { ...state };
       const id = dateIdMap[stateCopy.day];
-      stateCopy.days[id].spots += 1;
+      stateCopy.days[id].spots -= 1;
       return { ...stateCopy };
     }
     default:
