@@ -52,7 +52,15 @@ const useApplicationData = () => {
 
   useEffect(() => {
     const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
-    ws.onopen = () => ws.send("ping");
+    ws.onopen = () => {
+
+      ws.onmessage = (e) => {
+        const { type, id, interview } = JSON.parse(e.data);
+        dispatch({ type, id, interview });
+      }
+    }
+
+    return () => ws.close();
 
   }, []);
 
