@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "components/Appointment/styles.scss";
 import Header from "./Header";
 import Show from "./Show";
@@ -21,6 +21,11 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
   const ERROR_DELETE = "ERROR_DELETE";
 
   const { transition, back, mode } = useVisualMode(interview ? SHOW : EMPTY);
+
+  useEffect(() => {
+    if (mode === EMPTY && interview) transition(SHOW);
+    if (mode === SHOW && !interview) transition(EMPTY);
+  }, [interview, mode, transition])
 
   const save = async (name, interviewer) => {
     const interview = {
@@ -53,13 +58,13 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
   return (
     <article className="appointment">
       <Header time={time} />
-      {mode === SHOW && < Show
+      {mode === SHOW && interview && (< Show
         student={interview.student}
         interviewer={interview.interviewer.name}
         time={time}
         onDelete={() => transition(CONFIRM)}
         onEdit={() => transition(EDIT)}
-      />}
+      />)}
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === CREATE && <Form onSave={save} interviewers={interviewers} onCancel={() => back()} />}
       {mode === EDIT && <Form
