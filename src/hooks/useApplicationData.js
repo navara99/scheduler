@@ -23,7 +23,7 @@ function reducer(state, action) {
     case SET_APPLICATION_DATA:
       return { ...state, days, appointments, interviewers };
     case SET_INTERVIEW: {
-      const appointment = { ...state.appointments[id], interview: { ...interview } };
+      const appointment = { ...state.appointments[id], interview };
       const appointments = { ...state.appointments, [id]: appointment };
       return { ...state, appointments: { ...appointments } };
     }
