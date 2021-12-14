@@ -3,13 +3,13 @@ import InterviewerList from "components/InterviewerList";
 import Button from "components/Button";
 
 
-export default function Form({ student, interviewer, interviewers, onSave, onCancel }) {
+export default function Form({ student, interviewer, interviewers, onSave, onCancel, interviewerId }) {
   const [currentStudent, setCurrentStudent] = useState(student || "");
   const [currentInterviewer, setCurrentInterviewer] = useState(interviewer || null);
   const [error, setError] = useState("");
 
   const reset = () => {
-    setCurrentInterviewer("");
+    setCurrentInterviewer(null);
     setCurrentStudent("");
   };
 
@@ -20,6 +20,7 @@ export default function Form({ student, interviewer, interviewers, onSave, onCan
 
   const validate = () => {
     if (!currentStudent) return setError("Student name cannot be blank");
+    setError("");
     onSave(currentStudent, currentInterviewer);
   };
 
