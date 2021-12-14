@@ -1,11 +1,10 @@
 import axios from "axios";
 import { useEffect, useReducer } from "react";
+import { getAppointmentsForDay } from "helpers/selectors";
 
 const SET_DAY = "SET_DAY";
 const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
 const SET_INTERVIEW = "SET_INTERVIEW";
-const ADD_SPOT = "ADD_SPOT";
-const SUB_SPOT = "SUB_SPOT";
 
 function reducer(state, action) {
   const { day, days, appointments, interviewers, id, interview } = action;
@@ -25,19 +24,10 @@ function reducer(state, action) {
     case SET_INTERVIEW: {
       const appointment = { ...state.appointments[id], interview };
       const appointments = { ...state.appointments, [id]: appointment };
-      return { ...state, appointments: { ...appointments } };
-    }
-    case ADD_SPOT: {
-      const stateCopy = { ...state };
-      const id = dateIdMap[stateCopy.day];
-      stateCopy.days[id].spots += 1;
-      return { ...stateCopy };
-    }
-    case SUB_SPOT: {
-      const stateCopy = { ...state };
-      const id = dateIdMap[stateCopy.day];
-      stateCopy.days[id].spots -= 1;
-      return { ...stateCopy };
+      const stateCopy = { ...state, appointments };
+      const appointmentsForDay = getAppointmentsForDay(stateCopy, state.day);
+      stateCopy.days[dateIdMap[stateCopy.day]].spots = appointmentsForDay.filter((appointment) => !appointment.interview).length;
+      return { ...stateCopy, appointments: { ...appointments } };
     }
     default:
       throw new Error(
@@ -83,11 +73,6 @@ const useApplicationData = () => {
 
   const setDay = (day) => dispatch({ type: SET_DAY, day });
 
-  const updateSpots = (addSpot = true) => {
-    const type = addSpot ? ADD_SPOT : SUB_SPOT;
-    dispatch({ type })
-  }
-
   const bookInterview = async (id, interview) => {
 
     try {
@@ -96,7 +81,6 @@ const useApplicationData = () => {
       throw new Error(e)
     }
 
-    updateSpots(false);
     dispatch({ type: SET_INTERVIEW, id, interview });
   }
 
@@ -108,7 +92,6 @@ const useApplicationData = () => {
       throw new Error(e)
     }
 
-    updateSpots();
     dispatch({ type: SET_INTERVIEW, id, interview: null })
   }
 
