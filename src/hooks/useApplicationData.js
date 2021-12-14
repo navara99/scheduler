@@ -4,9 +4,18 @@ import { useEffect, useReducer } from "react";
 const SET_DAY = "SET_DAY";
 const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
 const SET_INTERVIEW = "SET_INTERVIEW";
+const ADD_SPOT = "ADD_SPOT";
+const SUB_SPOT = "SUB_SPOT";
 
 function reducer(state, action) {
   const { day, days, appointments, interviewers, id, interview } = action;
+  const dateIdMap = {
+    "Monday": 0,
+    "Tuesday": 1,
+    "Wednesday": 2,
+    "Thursday": 3,
+    "Friday": 4
+  };
 
   switch (action.type) {
     case SET_DAY:
@@ -18,6 +27,18 @@ function reducer(state, action) {
       const appointments = { ...state.appointments, [id]: appointment };
       return { ...state, appointments: { ...appointments } };
     }
+    case ADD_SPOT: {
+      const stateCopy = { ...state };
+      const id = dateIdMap[stateCopy.day];
+      stateCopy.days[id].spots -= 1;
+      return { ...stateCopy };
+    }
+    case SUB_SPOT: {
+      const stateCopy = { ...state };
+      const id = dateIdMap[stateCopy.day];
+      stateCopy.days[id].spots += 1;
+      return { ...stateCopy };
+    }
     default:
       throw new Error(
         `Tried to reduce with unsupported action type: ${action.type}`
@@ -28,13 +49,6 @@ function reducer(state, action) {
 
 const useApplicationData = () => {
   const [state, dispatch] = useReducer(reducer, { day: "Monday", days: [], appointments: {}, interviewers: {} })
-  const dateIdMap = {
-    "Monday": 0,
-    "Tuesday": 1,
-    "Wednesday": 2,
-    "Thursday": 3,
-    "Friday": 4
-  };
 
   useEffect(() => {
     const daysEndpoint = "/api/days";
@@ -55,14 +69,10 @@ const useApplicationData = () => {
 
   const setDay = (day) => dispatch({ type: SET_DAY, day });
 
-  // const updateSpots = (addSpot = true) => {
-  //   setState((prev) => {
-  //     const stateCopy = { ...prev };
-  //     const dayId = dateIdMap[stateCopy.day];
-  //     state.days[dayId].spots = addSpot ? state.days[dayId].spots + 1 : state.days[dayId].spots - 1;
-  //     return stateCopy
-  //   });
-  // }
+  const updateSpots = (addSpot = true) => {
+    const type = addSpot ? ADD_SPOT : SUB_SPOT;
+    dispatch({ type })
+  }
 
   const bookInterview = async (id, interview) => {
 
@@ -71,7 +81,8 @@ const useApplicationData = () => {
     } catch (e) {
       throw new Error(e)
     }
-    // updateSpots(false);
+
+    updateSpots(false);
     dispatch({ type: SET_INTERVIEW, id, interview });
   }
 
@@ -83,7 +94,7 @@ const useApplicationData = () => {
       throw new Error(e)
     }
 
-    // updateSpots();
+    updateSpots();
     dispatch({ type: SET_INTERVIEW, id, interview: null })
   }
 
