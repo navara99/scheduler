@@ -41,7 +41,7 @@ const useApplicationData = () => {
   const [state, dispatch] = useReducer(reducer, { day: "Monday", days: [], appointments: {}, interviewers: {} })
 
   useEffect(() => {
-    const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+    const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL || "ws://localhost:8001");
     ws.onopen = () => {
 
       ws.onmessage = (e) => {
