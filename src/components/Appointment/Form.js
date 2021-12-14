@@ -3,7 +3,7 @@ import InterviewerList from "components/InterviewerList";
 import Button from "components/Button";
 
 
-export default function Form({ student, interviewer, interviewers, onSave, onCancel, interviewerId }) {
+export default function Form({ student, interviewer, interviewers, onSave, onCancel }) {
   const [currentStudent, setCurrentStudent] = useState(student || "");
   const [currentInterviewer, setCurrentInterviewer] = useState(interviewer || null);
   const [error, setError] = useState("");
@@ -16,6 +16,7 @@ export default function Form({ student, interviewer, interviewers, onSave, onCan
   const cancel = () => {
     onCancel();
     reset();
+    setError("");
   };
 
   const validate = () => {
