@@ -18,10 +18,6 @@ afterEach(cleanup);
 
 describe("Application", () => {
 
-  it("renders without crashing", () => {
-    render(<Application />);
-  });
-
   it("defaults to Monday and changes the schedule when a new day is selected", () => {
     const { getByText } = render(<Application />);
 
@@ -84,5 +80,32 @@ describe("Application", () => {
 
     expect(getByText(day, /2 spots remaining/i)).toBeInTheDocument();
   });
+
+  it("loads data, edits an interview and keeps the remaining spots for Monday the same", async () => {
+    const { container } = render(<Application />);
+
+    await waitForElement(() => getByText(container, /Archie Cohen/i));
+
+    const appointment = getAllByTestId(container, /appointment/i).find((appointment) => queryByText(appointment, /Archie Cohen/i));
+
+    fireEvent.click(getByAltText(appointment, /edit/i));
+
+    fireEvent.change(getByPlaceholderText(appointment, /enter student name/i), {
+      target: { value: "Lydia Miller-Jones" }
+    });
+
+    fireEvent.click(getByAltText(appointment, /Sylvia Palmer/i));
+
+    fireEvent.click(getByText(appointment, /Save/i));
+
+    expect(getByText(appointment, /saving/i)).toBeInTheDocument();
+
+    await waitForElement(() => getByText(appointment, /Lydia Miller-Jones/i));
+
+    const day = getAllByTestId(container, "day").find(day =>queryByText(day, "Monday"));
+
+    expect(getByText(day, /1 spot remaining/i)).toBeInTheDocument();
+  });
+
 })
 
