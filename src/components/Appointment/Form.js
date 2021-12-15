@@ -21,6 +21,7 @@ export default function Form({ student, interviewer, interviewers, onSave, onCan
 
   const validate = () => {
     if (!currentStudent) return setError("Student name cannot be blank");
+    if (!currentInterviewer) return setError("Please select an interviewer")
     setError("");
     onSave(currentStudent, currentInterviewer);
   };
