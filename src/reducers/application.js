@@ -15,8 +15,8 @@ function reducer(state, action) {
   };
 
   switch (action.type) {
-    case SET_DAY:
-      return { ...state, day };
+    // case SET_DAY:
+    //   return { ...state, day };
     case SET_APPLICATION_DATA:
       return { ...state, days, appointments, interviewers };
     case SET_INTERVIEW: {
