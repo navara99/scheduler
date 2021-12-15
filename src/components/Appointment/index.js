@@ -56,7 +56,7 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
   }
 
   return (
-    <article className="appointment">
+    <article className="appointment" data-testid="appointment">
       <Header time={time} />
       {mode === SHOW && interview && (< Show
         student={interview.student}
