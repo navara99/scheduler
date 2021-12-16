@@ -71,7 +71,7 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
         onSave={save}
         onCancel={() => back()}
         interviewers={interviewers}
-        interviewer={interview.interviewer}
+        interviewer={interview.interviewer.id}
         student={interview.student}
       />}
       {mode === SAVING && <Status message="Saving" />}
