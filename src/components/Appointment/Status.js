@@ -2,8 +2,6 @@ import React from "react"
 
 export default function ({ message }) {
 
-
-
   return (
     <main className="appointment__card appointment__card--status">
       <img
@@ -13,5 +11,5 @@ export default function ({ message }) {
       />
       <h1 className="text--semi-bold">{message}</h1>
     </main>
-  )
-}
+  );
+};

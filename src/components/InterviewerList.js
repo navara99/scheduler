@@ -3,7 +3,6 @@ import "components/InterviewerList.scss";
 import InterviewListItem from "./InterviewListItem";
 import PropTypes from "prop-types";
 
-
 function InterviewerList({ interviewers, onChange, value }) {
 
   const interviewerItems = interviewers.map((interviewerItem) => {
@@ -22,8 +21,8 @@ function InterviewerList({ interviewers, onChange, value }) {
       <h4 className="interviewers__header text--light">Interviewer</h4>
       <ul className="interviewers__list">{interviewerItems}</ul>
     </section>
-  )
-}
+  );
+};
 
 InterviewerList.propTypes = {
   interviewers: PropTypes.array.isRequired

@@ -25,13 +25,14 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
   useEffect(() => {
     if (mode === EMPTY && interview) transition(SHOW);
     if (mode === SHOW && !interview) transition(EMPTY);
-  }, [interview, mode, transition])
+  }, [interview, mode, transition]);
 
   const save = async (name, interviewer) => {
+
     const interview = {
       student: name,
       interviewer
-    }
+    };
 
     try {
       transition(SAVING);
@@ -39,7 +40,7 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
       transition(SHOW);
     } catch (e) {
       transition(ERROR_SAVE, true);
-    }
+    };
 
   };
 
@@ -51,9 +52,9 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
       transition(EMPTY);
     } catch (e) {
       transition(ERROR_DELETE, true);
-    }
+    };
 
-  }
+  };
 
   return (
     <article className="appointment" data-testid="appointment">
@@ -84,6 +85,6 @@ export default function Appointment({ time, interview, interviewers, bookIntervi
       {mode === ERROR_SAVE && <Error message="Could not save appointment." onClose={() => back()} />}
       {mode === ERROR_DELETE && <Error message="Could not cancel appointment." onClose={() => back()} />}
     </article>
-  )
+  );
 
-}
+};

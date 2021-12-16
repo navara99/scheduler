@@ -2,7 +2,6 @@ import React from "react";
 
 export default function ({ student, interviewer, onEdit, onDelete }) {
 
-
   return (
     <main className="appointment__card appointment__card--show">
       <section className="appointment__card-left">
@@ -29,5 +28,5 @@ export default function ({ student, interviewer, onEdit, onDelete }) {
         </section>
       </section>
     </main>
-  )
-}
+  );
+};

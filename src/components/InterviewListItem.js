@@ -16,5 +16,5 @@ export default function InterviewListItem({ name, avatar, selected, setInterview
       />
       {selected && name}
     </li>
-  )
-}
+  );
+};

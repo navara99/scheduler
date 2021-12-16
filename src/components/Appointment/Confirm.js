@@ -3,7 +3,6 @@ import Button from "components/Button";
 
 export default function ({ message, onConfirm, onCancel }) {
 
-
   return (
     <main className="appointment__card appointment__card--confirm">
       <h1 className="text--semi-bold">{message}</h1>
@@ -12,5 +11,6 @@ export default function ({ message, onConfirm, onCancel }) {
         <Button danger onClick={onConfirm}>Confirm</Button>
       </section>
     </main>
-  )
-}
+  );
+
+};

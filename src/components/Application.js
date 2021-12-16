@@ -5,7 +5,7 @@ import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "help
 import "components/Application.scss";
 import useApplicationData from "hooks/useApplicationData";
 
-export default function Application(props) {
+export default function Application() {
   const { state, setDay, bookInterview, cancelInterview } = useApplicationData();
   const interviewersForDay = getInterviewersForDay(state, state.day);
 
@@ -22,7 +22,6 @@ export default function Application(props) {
       bookInterview={bookInterview}
     />
   }).concat(<Appointment key="last" time="5pm" />);
-
 
   return (
     <main className="layout">
@@ -51,4 +50,4 @@ export default function Application(props) {
       </section>
     </main>
   );
-}
+};

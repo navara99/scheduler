@@ -3,7 +3,7 @@ import { useEffect, useReducer } from "react";
 import { reducer, SET_APPLICATION_DATA, SET_DAY, SET_INTERVIEW } from "reducers/application";
 
 const useApplicationData = () => {
-  const [state, dispatch] = useReducer(reducer, { day: "Monday", days: [], appointments: {}, interviewers: {} })
+  const [state, dispatch] = useReducer(reducer, { day: "Monday", days: [], appointments: {}, interviewers: {} });
 
   useEffect(() => {
     const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL || "ws://localhost:8001");
@@ -12,8 +12,8 @@ const useApplicationData = () => {
       ws.onmessage = (e) => {
         const { type, id, interview } = JSON.parse(e.data);
         dispatch({ type, id, interview });
-      }
-    }
+      };
+    };
 
     return () => ws.close();
 
@@ -43,24 +43,24 @@ const useApplicationData = () => {
     try {
       await axios.put(`/api/appointments/${id}`, { ...state.appointments[id], interview: { ...interview } });
     } catch (e) {
-      throw new Error(e)
-    }
+      throw new Error(e);
+    };
 
     dispatch({ type: SET_INTERVIEW, id, interview });
-  }
+  };
 
   const cancelInterview = async (id) => {
 
     try {
       await axios.delete(`/api/appointments/${id}`);
     } catch (e) {
-      throw new Error(e)
-    }
+      throw new Error(e);
+    };
 
-    dispatch({ type: SET_INTERVIEW, id, interview: null })
-  }
+    dispatch({ type: SET_INTERVIEW, id, interview: null });
+  };
 
-  return { state, setDay, bookInterview, cancelInterview }
-}
+  return { state, setDay, bookInterview, cancelInterview };
+};
 
 export default useApplicationData;
