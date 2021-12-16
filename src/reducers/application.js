@@ -23,8 +23,15 @@ function reducer(state, action) {
       const appointment = { ...state.appointments[id], interview };
       const appointments = { ...state.appointments, [id]: appointment };
       const stateCopy = { ...state, appointments };
-      const appointmentsForDay = getAppointmentsForDay(stateCopy, state.day);
-      stateCopy.days[dateIdMap[stateCopy.day]].spots = appointmentsForDay.filter((appointment) => !appointment.interview).length;
+
+      // Get appointments for each day and update the number of spots remaining 
+  
+      stateCopy.days.forEach((day) => {
+        const appointmentsForDay = getAppointmentsForDay(stateCopy, day.name);
+        stateCopy.days[dateIdMap[day.name]].spots = appointmentsForDay.filter((appointment) => !appointment.interview).length;
+      });
+
+
       return { ...stateCopy, appointments: { ...appointments } };
     }
     default:
@@ -35,4 +42,4 @@ function reducer(state, action) {
 
 }
 
-export {reducer, SET_APPLICATION_DATA, SET_DAY, SET_INTERVIEW};
+export { reducer, SET_APPLICATION_DATA, SET_DAY, SET_INTERVIEW };
